@@ -20,9 +20,10 @@ public class Persoon {
     }
 
     public boolean koop(Game g) {
-        if (budget <= g.huidigewaarde() || mijngames.contains(g)) {
+        if (budget < g.huidigeWaarde() || mijngames.contains(g)) {
             return false;
         } else {
+            this.budget -= g.huidigeWaarde();
             mijngames.add(g);
             return true;
         }
@@ -53,19 +54,23 @@ public class Persoon {
     }
 
     public boolean verkoop(Game g, Persoon koper) {
-        if (koper.budget <= g.huidigewaarde() || koper.mijngames.contains(g) || !mijngames.contains(g)) {
+        if (koper.budget < g.huidigeWaarde() || koper.mijngames.contains(g) || !mijngames.contains(g)) {
             return false;
 
         } else {
+            this.budget+=g.huidigeWaarde();
+            koper.budget-=g.huidigeWaarde();
+            mijngames.remove(g);
             koper.mijngames.add(g);
             return true;
         }
     }
 
     public String toString() {
-        String s = naam + " heeft een budget van " + String.format("%.2f", budget) + " en bezit de volgende games:" + "\n";
+        String s = naam + " heeft een budget van €" + String.format("%.2f", budget) + " en bezit de volgende games:";
+        s.replaceAll("\\.",",");
         for (Game game : mijngames) {
-            s += game+"\n";
+            s = s + "\n" + game;
         }
         return s;
     }
